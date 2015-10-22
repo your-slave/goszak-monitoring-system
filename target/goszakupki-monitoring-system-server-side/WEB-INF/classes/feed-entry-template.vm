@@ -1,0 +1,26 @@
+#if($international)
+        <p  style='text-align:left;color:#000000;font-size:14px;font-weight:normal;line-height:19px;'>
+            <font color=#3C2927>Краткая информация:</font> $receivedInformation.briefDescription
+            <br>
+            <font color=#3C2927>Страна:</font> $receivedInformation.country
+            <br>
+            <font color=#3C2927>Регион:</font> $receivedInformation.companyRegion
+            <br>
+            <font color=#3C2927>Стоимостью:</font> $receivedInformation.cost
+            <br>
+            <font color=#3C2927>Предложение действительно до:</font> $receivedInformation.requestEndTme
+        </p>
+
+#else
+        <p  style='text-align:left;color:#000000;font-size:14px;font-weight:normal;line-height:19px;'>
+            <font color=#3C2927>Краткая информация:</font> $receivedInformation.briefDescription
+            <br>
+            <font color=#3C2927>Заказчик:</font> $receivedInformation.companyRegion
+            <br>
+            <font color=#3C2927>Стоимостью:</font> $receivedInformation.cost
+            <br>
+            <font color=#3C2927>Предложение действительно до:</font> $receivedInformation.requestEndTme
+        </p>
+
+#end
+

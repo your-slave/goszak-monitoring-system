@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+        xmlns="http://www.springframework.org/schema/mvc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:task="http://www.springframework.org/schema/task"
+        xmlns:beans="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation=
+                "http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/task
+
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+    <task:annotation-driven scheduler="scheduler"/>
+
+    <beans:bean id="applicationContextProvder" class="service.ApplicationContextProvider"/>
+
+    <task:scheduler id="scheduler" pool-size="60"/>
+
+    <beans:bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <beans:property name="host" value="smtp.gmail.com" />
+        <beans:property name="port" value="587" />
+        <beans:property name="username" value="goszak.monitoring.service" />
+        <beans:property name="password" value="zakgos321" />
+
+        <beans:property name="javaMailProperties">
+            <beans:props>
+                <beans:prop key="mail.smtp.auth">true</beans:prop>
+                <beans:prop key="mail.smtp.starttls.enable">true</beans:prop>
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id="emailPresenter" class="service.logic.PresenterImpl">
+        <beans:property name="velocityEngine" ref="velocityEngine" />
+    </beans:bean>
+
+    <beans:bean id="rssGenerator" class="service.logic.RssGenerator">
+        <beans:property name="velocityEngine" ref="velocityEngine" />
+    </beans:bean>
+
+
+    <beans:bean id="emailSender" class="service.logic.EmailSender">
+        <beans:property name="mailSender" ref="mailSender" />
+    </beans:bean>
+
+    <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+                destroy-method="close">
+        <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <beans:property name="url" value="jdbc:mysql://localhost:3306/goszakupk_monitoring_system_db" />
+        <beans:property name="username" value="root" />
+        <beans:property name="password" value="root" />
+    </beans:bean>
+
+
+    <!-- Hibernate 4 SessionFactory Bean definition -->
+    <beans:bean id="hibernate4AnnotatedSessionFactory"
+                class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" scope="prototype">  <!--?????-->
+        <beans:property name="dataSource" ref="dataSource" />
+        <beans:property name="annotatedClasses">
+            <beans:list>
+                <beans:value>entity.User</beans:value>
+                <beans:value>entity.Country</beans:value>
+                <beans:value>entity.Criteria</beans:value>
+                <beans:value>entity.Establishment</beans:value>
+                <beans:value>entity.Industry</beans:value>
+                <beans:value>entity.Notification</beans:value>
+                <beans:value>entity.NotificationType</beans:value>
+                <beans:value>entity.Period</beans:value>
+                <beans:value>entity.ReceivedInformation</beans:value>
+                <beans:value>entity.Region</beans:value>
+                <beans:value>entity.User</beans:value>
+                <beans:value>entity.ZakupType1</beans:value>
+                <beans:value>entity.ZakupType2</beans:value>
+                <beans:value>entity.ReceivedInformation</beans:value>
+            </beans:list>
+        </beans:property>
+        <beans:property name="hibernateProperties">
+            <beans:props>
+                <beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</beans:prop>
+                <beans:prop key="hibernate.current_session_context_class">thread</beans:prop>
+                <beans:prop key="hibernate.show_sql">true</beans:prop>
+                <beans:prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/goszakupk_monitoring_system_db</beans:prop>
+                <beans:prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</beans:prop>
+            </beans:props>
+        </beans:property>
+
+    </beans:bean>
+
+    <beans:bean id="criteria" class="entity.Criteria" scope="prototype">    </beans:bean>
+    <beans:bean id="country" class="entity.Country" scope="prototype">    </beans:bean>
+    <beans:bean id="establishment" class="entity.Establishment" scope="prototype">    </beans:bean>
+    <beans:bean id="industry" class="entity.Industry" scope="prototype">    </beans:bean>
+    <beans:bean id="notification" class="entity.Notification" scope="prototype">    </beans:bean>
+    <beans:bean id="notificationType" class="entity.NotificationType" scope="prototype">    </beans:bean>
+    <beans:bean id="recievedInformation" class="entity.ReceivedInformation" scope="prototype">    </beans:bean>
+    <beans:bean id="region" class="entity.Region" scope="prototype">    </beans:bean>
+    <beans:bean id="user" class="entity.User" scope="prototype">    </beans:bean>
+    <beans:bean id="zakupType1" class="entity.ZakupType1" scope="prototype">    </beans:bean>
+    <beans:bean id="zakupType2" class="entity.ZakupType2" scope="prototype">    </beans:bean>
+    <beans:bean id="countryDictionaryRepresentation" class="service.representation.CountryDictionaryRepresentation" scope="prototype">    </beans:bean>
+    <beans:bean id="defaultDictionaryRepresntation" class="service.representation.DefaultDictionaryRepresntation" scope="prototype">    </beans:bean>
+    <beans:bean id="industryDictionaryRepresntation" class="service.representation.IndustryDictionaryRepresentation" scope="prototype">    </beans:bean>
+    <beans:bean id="criteriaRepresntation" class="service.representation.CriteriaRepresentation" scope="prototype">    </beans:bean>
+    <beans:bean id="receivedInformationRepresntation" class="service.representation.ReceivedInformationRepresntation" scope="prototype">    </beans:bean>
+    <beans:bean id="notificationRepresentation" class="service.representation.NotificationRepresentation" scope="prototype">    </beans:bean>
+
+
+    <beans:bean id="userDAO" class="dao.UserDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="criteriaDAO" class="dao.CriteriaDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="countryDAO" class="dao.CountryDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="establishmentDAO" class="dao.EstablishmentDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="industryDAO" class="dao.IndustryDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="notificationTypeDAO" class="dao.NotificationTypeDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="periodDAO" class="dao.PeriodDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="regionDAO" class="dao.RegionDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="zakupType1DAO" class="dao.ZakupType1DAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="zakupType2DAO" class="dao.ZakupType2DAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="receivedInformationDAO" class="dao.ReceivedInformationDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    <beans:bean id="notificationDAO" class="dao.NotificationDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+
+    <beans:bean id="linkGenerator" class="service.logic.LinkGeneratorImpl"  scope="prototype"> </beans:bean>
+    <beans:bean id="parser" class="service.logic.ParserImpl"  scope="prototype"> </beans:bean>
+    <beans:bean id="schedulesMap" class="java.util.HashMap"  > </beans:bean>
+    <beans:bean id="countryIdSet" class="java.util.HashSet"  > </beans:bean>
+    <beans:bean id="establishmentIdSet" class="java.util.HashSet"  > </beans:bean>
+    <beans:bean id="industryIdSet" class="java.util.HashSet"  > </beans:bean>
+    <beans:bean id="notificationTypeIdSet" class="java.util.HashSet"  > </beans:bean>
+    <beans:bean id="periodIdSet" class="java.util.HashSet"  > </beans:bean>
+    <beans:bean id="regionIdSet" class="java.util.HashSet"  > </beans:bean>
+    <beans:bean id="zakupType1IdSet" class="java.util.HashSet"  > </beans:bean>
+    <beans:bean id="zakupType2IdSet" class="java.util.HashSet"  > </beans:bean>
+
+    <beans:bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <beans:property name="velocityProperties">
+            <beans:value>
+                resource.loader=class
+                class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+            </beans:value>
+        </beans:property>
+    </beans:bean>
+
+
+
+</beans:beans>
