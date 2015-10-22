@@ -37,7 +37,7 @@ $ mvn clean install
 
 The source code is published under [GPLv2][GPLv2 link] license.
 
-  [Government procurement site link]: www.icetrade.by
+  [Government procurement site link]: https://www.icetrade.by
    
   [Apache Tomcat link]: https://tomcat.apache.org/
   
