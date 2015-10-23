@@ -27,7 +27,7 @@ As a servelt container [Apache Tomcat][Apache Tomcat link] was used.
 
 You will need JDK 8+ and Apache Tomcat 8+ installed.
 
-In oкder to download all dependencies use the following Maven command:
+In order to download all dependencies use the following Maven command:
 
 ```
 $ mvn clean install
