@@ -21,6 +21,8 @@ The list of used libraries is shown below:
 * [Velocity][Velocity link]
 * [Rome][Rome link]
 
+For a database management system MySQL was used.
+
 As a servelt container [Apache Tomcat][Apache Tomcat link] was used.
 
 ## Building
